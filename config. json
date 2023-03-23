@@ -1,7 +1,8 @@
 {
-  "TOKEN": "",
+  "TOKEN": "ODgwMTAyNDk2NDUyODc4Mzk3.GE1onQ.Ox1Y8d5E2qMFrV8iajA6a9P0KoMbIn_YEhEJqY",
+  "YOUTUBE_API_KEY",: "AIzaSyAHJTlYvs_VcFKWrrjTeMU57D0-9DdEInc"
   "MAX_PLAYLIST_SIZE": 10,
-  "PREFIX": "/",
+  "PREFIX": "=",
   "PRUNING": false,
   "LOCALE": "en",
   "STAY_TIME": 30,
