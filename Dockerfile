@@ -11,13 +11,12 @@ RUN apt-get update && \
 RUN groupadd -r ${USER} && \
 	useradd --create-home --home /home/evobot -r -g ${USER} ${USER}
 
-# set up volume and user
+# set up user
 USER ${USER}
 WORKDIR /home/evobot
 
 COPY --chown=${USER}:${USER} package*.json ./
 RUN npm install
-VOLUME [ "/home/evobot" ]
 
 COPY --chown=${USER}:${USER}  . .
 
