@@ -6,7 +6,7 @@
   "author": "Erit Islami <eritislami@gmail.com>",
   "private": true,
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20"
   },
   "scripts": {
     "dev": "nodemon index.ts",
