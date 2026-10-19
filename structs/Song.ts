@@ -1,9 +1,18 @@
 import { AudioResource, createAudioResource, StreamType } from "@discordjs/voice";
 import youtube from "youtube-sr";
-import { getInfo } from "ytdl-core";
-import ytdl from "ytdl-core-discord";
+import ytdl from "@distube/ytdl-core";
 import { i18n } from "../utils/i18n";
 import { videoPattern, isURL } from "../utils/patterns";
+
+// Optional YouTube credentials, read from the environment and never hardcoded.
+function getRequestOptions() {
+  const headers: Record<string, string> = {};
+
+  if (process.env.YT_COOKIE) headers.cookie = process.env.YT_COOKIE;
+  if (process.env.YT_TOKEN) headers["x-youtube-identity-token"] = process.env.YT_TOKEN;
+
+  return Object.keys(headers).length ? { headers } : {};
+}
 
 export interface SongData {
   url: string;
@@ -28,7 +37,7 @@ export class Song {
     let songInfo;
 
     if (isYoutubeUrl) {
-      songInfo = await getInfo(url);
+      songInfo = await ytdl.getInfo(url, { requestOptions: getRequestOptions() });
 
       return new this({
         url: songInfo.videoDetails.video_url,
@@ -47,7 +56,9 @@ export class Song {
 
         throw err;
       }
-      songInfo = await getInfo(`https://youtube.com/watch?v=${result.id}`);
+      songInfo = await ytdl.getInfo(`https://youtube.com/watch?v=${result.id}`, {
+        requestOptions: getRequestOptions()
+      });
 
       return new this({
         url: songInfo.videoDetails.video_url,
@@ -60,12 +71,17 @@ export class Song {
   public async makeResource(): Promise<AudioResource<Song> | void> {
     let stream;
 
-    let type = this.url.includes("youtube.com") ? StreamType.Opus : StreamType.OggOpus;
+    let type = this.url.includes("youtube.com") ? StreamType.Arbitrary : StreamType.OggOpus;
 
     const source = this.url.includes("youtube") ? "youtube" : "soundcloud";
 
     if (source === "youtube") {
-      stream = await ytdl(this.url, { quality: "highestaudio", highWaterMark: 1 << 25 });
+      stream = ytdl(this.url, {
+        filter: "audioonly",
+        quality: "highestaudio",
+        highWaterMark: 1 << 25,
+        requestOptions: getRequestOptions()
+      });
     }
 
     if (!stream) return;
