@@ -25,7 +25,7 @@
     "soundcloud-downloader": "^0.2.3",
     "string-progressbar": "^1.0.4",
     "youtube-sr": "~4.3.0",
-    "@distube/ytdl-core": "^4.16.0"
+    "@distube/yt-dlp": "^4.16.0"
   },
   "devDependencies": {
     "@types/i18n": "^0.13.6",
